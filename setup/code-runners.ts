@@ -75,22 +75,5 @@ export default defineCodeRunnersSetup(() => {
         element: el,
       }
     },
-    async ts(code) {
-      const Babel = await import('@babel/standalone');
-
-      const transformed = Babel.transform(code, {
-        presets: ['typescript', 'env'],
-      }).code;
-
-      const fn = new Function(transformed);
-      fn();
-
-      return {
-        text: fn,
-      };
-    },
-    async tsx(code) {
-      console.log(code);
-    },
   };
 });

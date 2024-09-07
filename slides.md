@@ -1,7 +1,7 @@
 ---
 theme: seriph
 background: https://res.cloudinary.com/drnqdd87d/image/upload/f_auto/nmgakkzd3lmlibnfosps
-title: TypeScript Class Notes
+title: TypeScript Class Notes by @Oluwasetemi
 info: |
   ## TypeScript Class Notes
 
@@ -34,6 +34,10 @@ AltSchool Africa
   <a href="https://github.com/Oluwasetemi/typescript-class-note" target="_blank" alt="GitHub" title="Open in GitHub"
     class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
     <carbon-logo-github />
+  </a>
+  <a href="https://github.com/Oluwasetemi/typescript-class-note" target="_blank" alt="GitHub" title="Open in GitHub"
+    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+    <carbon-download />
   </a>
 </div>
 
@@ -167,6 +171,14 @@ hideInToc: true
 
 - Explicit Types: You can use the noImplicitAny flag to prevent TypeScript from inferring the any type.
 
+</v-clicks>
+
+---
+hideInToc: true
+---
+
+# tsconfig.json
+
 - Erased Types: You can use the noUnusedLocals and noUnusedParameters flags to prevent TypeScript from emitting JavaScript code if there are any unused variables or parameters.
 
 ```json
@@ -180,8 +192,6 @@ hideInToc: true
   }
 }
 ```
-
-</v-clicks>
 
 ---
 
@@ -204,7 +214,9 @@ let age: number = 99;
 let isAltSchoolStudent = false;
 let nothing = null;
 let something = undefined;
+```
 
+```ts
 let arrayOfScores = [99, 45, 56, 67, 99];
 let arrayOfScores2: number[] = [99, 45, 56, 67, 99];
 
@@ -218,7 +230,9 @@ let names: Array<string> = ["dancing", "eating", "sleeping"];
 let arrayInsideArrays = [["a"], ["b"]];
 
 let newArr = [undefined];
+```
 
+```ts
 let obj: { name: string; age: number; job?: string } = {
   name: "ade",
   age: 99,
@@ -235,7 +249,9 @@ if (typeof obj.job === "string") {
   // strictly undefined
   obj.job;
 }
+```
 
+```ts
 let profile: Record<string, number> = {
   age: 99,
   height: 6,
@@ -252,7 +268,9 @@ objFlex[Symbol("id")] = true;
 let objFlexNumber: Record<string, number> = {
   age: 99,
 };
+```
 
+```ts
 // mixing types
 const specialArr: Array<number | string | [] | {}> = [
   "name",
@@ -269,15 +287,16 @@ result;
 
 console.log(result);
 console.log("Hello", "AltSchool");
-
-// any, function, specific type
+```
+```ts
 let user: "student" | "admin";
 
 user = "temi";
 
 user = "admin";
+```
 
-// typing return values
+```ts
 function add(): number {
   console.log("hello");
   return 99;
@@ -289,7 +308,9 @@ function add2(a: number, b: number): number {
 }
 
 add2(99, 78);
+```
 
+```ts
 // function overloading
 
 function add3(a: number, b: number): number;
@@ -303,10 +324,12 @@ add3(99, 78);
 let name2: any = "wale";
 let age2: any = 99;
 add3(name2, age2);
+```
 
 // type assertion as
 //
 
+```ts
 // type alias
 type Person = {
   name: string;
@@ -317,8 +340,11 @@ let person2: Person = {
   name: "ade",
   age: 99,
 };
+```
 //
 //
+
+```ts
 // interface
 interface Person2 {
   name: string;
@@ -330,11 +356,17 @@ function greet2(person: Person2): string {
 }
 
 greet2({ name: "ade", age: 99 });
-//
-// let res = JSON.parse('{"name": "ade"}') as { name: string };
+```
 
+```ts
+// type assertion
+let res = JSON.parse('{"name": "ade"}') as { name: string };
+```
+```ts
 // 'satifies', 'as const', '!'
-//
+```
+
+```ts
 const addTwoNumbers = (a: number, b: number): number => {
   return a + b;
 };
@@ -348,10 +380,12 @@ const addTwoNumberObject = (params: { a: number; b: number }): number => {
   return params.a + params.b;
 };
 
+```
+```ts
+// extending the inteface(obj only!)
 interface ThreeParams extends Params {
   c: number;
 }
-
 // conditional type
 type NewParams = ThreeParams extends Params ? string : number;
 
@@ -360,7 +394,9 @@ const addThreeNumberObject = (params: ThreeParams): number => {
 };
 
 addThreeNumberObject({ a: 99, b: 78, c: 100 });
+```
 
+```ts
 // make b optional
 const addTwoNumberObject2 = (params: { a: number; b?: number }): number => {
   if (params.b) {
@@ -370,7 +406,8 @@ const addTwoNumberObject2 = (params: { a: number; b?: number }): number => {
 };
 
 console.log(addTwoNumberObject2({ a: 99 }));
-
+```
+```ts
 const addTwoNumberObject3 = (params: { a?: number; b?: number }): number => {
   if (params.a) {
     return params.a;
@@ -384,7 +421,9 @@ const addTwoNumberObject3 = (params: { a?: number; b?: number }): number => {
 };
 
 addTwoNumberObject3({});
+```
 
+```ts
 const addTwoNumber3 = (a: number = 2, b: number = 5) => {
   return a + b;
 };
@@ -394,11 +433,19 @@ addTwoNumber3();
 type Admin = {
   name: boolean;
 };
+```
+````
+---
+hideInToc: true
+---
 
+# Everyday Types
+
+````md magic-move
+```ts {*|1-3|*|6-9|10-13|15|*}
 function getPersonName(admin: Admin) {
   return admin.name;
 }
-let client = "name";
 getPersonName({ name: false });
 
 type AdminModified = {
@@ -411,7 +458,9 @@ function getPersonString(admin: AdminModified) {
 }
 
 getPersonString({ name: "ken", role: "superadmin" });
+```
 
+```ts
 type Post = {
   title: string;
   author: string;
@@ -428,7 +477,8 @@ type AdminWithPosts = {
 function getPersonPost(person: AdminWithPosts): Array<Post> {
   return person.posts;
 }
-
+```
+```ts
 let res = getPersonPost({
   posts: [
     {
@@ -441,12 +491,16 @@ let res = getPersonPost({
   name: "ken",
   role: "admin",
 });
+console.log(res);
+```
 
+```ts
 type NewPost = keyof (typeof res)[0]; // "title" | "author" | "id" | "body"
 let newPostKey: NewPost = "author";
 console.log(newPostKey);
+```
 
-console.log(res);
+```ts
 type GitHubUser = {
   login: string;
   id: number;
@@ -467,21 +521,10 @@ type GitHubUser = {
   type: string;
   site_admin: boolean;
   name: string;
-  company: string;
-  blog: string;
-  location: string;
-  email: null;
-  hireable: null;
-  bio: string;
-  twitter_username: string;
-  public_repos: number;
-  public_gists: number;
-  followers: number;
-  following: number;
-  created_at: string;
-  updated_at: string;
 };
+```
 
+```ts
 type NewGitHub = Pick<GitHubUser, "login" | "id" | "node_id">;
 
 let newGitHub: NewGitHub = {
@@ -496,20 +539,16 @@ let newGitHubModified: newGitHubModified = {
   login: "ade",
   id: 99,
 };
-
+```
+```ts
 async function fetchGitHubUser(username: string) {
   return fetch(`https://api.github.com/users/${username}`).then((res) =>
     res.json(),
   );
 }
+```
 
-
-
-(async () => {
-  let githubUser = await fetchGitHubUser("Oluwasetemi");
-  console.log(githubUser.avatar_url);
-})();
-
+```ts
 const listOfStudent = new Set<string>();
 listOfStudent.add("ade");
 listOfStudent.add("ade");
@@ -522,7 +561,8 @@ let mapOfStudentToScores = new Map<string, number>();
 mapOfStudentToScores.set("ade", 99);
 console.log(mapOfStudentToScores);
 mapOfStudentToScores;
-
+```
+```ts
 // tuples
 let tuple: [string, number] = ["ade", 99];
 
@@ -532,17 +572,18 @@ color = [255, 0, 0, 0.1];
 // rgba
 
 let colorString = `rgb(${color.join(", ")})`;
-
+```
+```ts
 // unions |
 let str: number | string;
 
-// at the level of types and inteface
+// at the level of types and interface
 let advancePostU: Post | { tags: string[] } = {
   title: "hello",
   id: 1,
   author: "Authur Ts",
   body: "hello body",
-  // tags: ['hello', 'world']
+  tags: ['hello', 'world']
 };
 
 // intersection &
@@ -554,7 +595,9 @@ let advancePost: Post & Tags = {
   body: "hello body",
   tags: ["hello", "world"],
 };
+```
 
+```ts
 let NewStringIndex: { [index: number]: string };
 
 NewStringIndex = ["1", "2", "3", "4", "5"];
@@ -567,14 +610,19 @@ NewStringIndex = ["1", "2", "3", "4", "5"];
 NewStringIndex[0] = "hello";
 
 NewStringIndex["job"] = "developer";
+```
 
+```ts
+// readonly
 let arrOfCommenter: readonly string[] = ["ade", "bisi", "sola"];
 
 arrOfCommenter.push("aderemi");
 
 let arrOfCommenter2: ReadonlyArray<string> = ["ade", "bisi", "sola"];
 arrOfCommenter2.push("aderemi");
+```
 
+```ts
 function longest<Type extends { length: number }>(a: Type, b: Type) {
   if (a.length >= b.length) {
     return a;
@@ -592,17 +640,11 @@ function merge<T, U>(firstObject: T, secondObject: U): T & U {
   };
 }
 
-type Result<T extends Function> = T extends (...args: never[]) => infer R
-  ? R
-  : never;
-
-add2(2, 4);
-
 let res35 = merge({ name: "ade" }, { age: 99 });
 let res37 = merge({ school: "AltSchool" }, { job: "cleaner" });
-
+```
+```ts
 // enums - user (ADMIN, CLIENT, SUPERADMIN)
-//
 enum Role {
   ADMIN,
   CLIENT,
@@ -618,17 +660,16 @@ type User = {
   name: string;
   address: string;
 };
+```
 
+```ts
 function checkUserRole(user: User): string {
   const { role } = user;
   if (role === Role.ADMIN) {
-    // narrowing
-    // type guard
     return "admin";
   } else if (role === Role.CLIENT) {
     return "client";
   }
-  // Role.SUPERADMIN;
   return "superadmin";
 }
 
@@ -641,21 +682,19 @@ let userAltSchool: User = {
 
 let resultAltSchool = checkUserRole(userAltSchool);
 console.log(resultAltSchool);
-
+```
+```ts
 // Type manipulation - keyof, typeof, in, infer, extends, in, as, is, &
 
-// keyof 'id' | role | 'name' | 'address'
-// type U = keyof {x: string, y: number} // 'x' | 'y'
+type U = keyof {x: string, y: number} // 'x' | 'y'
 type KeyOfUserType = keyof User;
 type Arrayish = { [n: number]: string }; // string[]
 type keyOfArray = keyof Arrayish;
-
 let sampleArray: { [n: number]: string } = ["ade", "bisi", "sola"];
 
 let keyOfUser: KeyOfUserType = "name";
-
-console.log(userAltSchool[keyOfUser]);
-
+```
+```ts
 // typeof
 let myName = "ade";
 type Name = typeof myName;
@@ -670,26 +709,24 @@ function f() {
 }
 // infer
 type P = ReturnType<typeof f>;
-
+```
+```ts
 // indexed access types
 type Person3 = { name: string; age: number; address: string };
 type Age = Person3["address" | "age"];
 
 // Conditional Types
 // SomeType extends OtherType ? TrueType : FalseType
-// type Exclude<T, U> = T extends U ? never : T;
+type Exclude<T, U> = T extends U ? never : T;
 // type T = Exclude<"a" | "b" | "c", "a" | "c">; // "b"
-//
-
+```
+```ts
 // mapped types
-//
-//
 type Person4 = {
   [key: string]: string;
 };
 
 // Template Literal Types
-
 type World = "world";
 type Greeting = `hello ${World}`;
 ```
@@ -702,7 +739,7 @@ type Greeting = `hello ${World}`;
 let person: string | number = "helloTtypescript";
 
 let result: number[] = person.split("T");
-//  ^?
+//  //^?
 
 console.log(result);
 console.log("Hello", "AltSchool");
@@ -775,7 +812,7 @@ function fn(ctor: SomeConstructor) {
 
 ---
 
-```ts {monaco-run} {autorun: false, line: true}
+```ts {monaco-run} {autorun: true}
 type DescribableFunction = {
   description: string;
   (someArg: number): boolean;
@@ -806,7 +843,7 @@ doSomething(myFunc);
 
 <v-click>
 
-```ts {monaco-run} {autorun: false}
+```ts {monaco-run} {autorun: true}
 import { emptyArray } from './external'
 
 console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-2)!], [1, 1]))
@@ -833,7 +870,7 @@ hideInToc: true
 ---
 ## Solve this using TS Generics
 
-```ts {monaco-run} {autorun: false}
+```ts {monaco-run} {autorun: true}
 function getRandomNumberElement(items: number[]): number {
   let randomIndex = Math.floor(Math.random() * items.length);
   return items[randomIndex];
@@ -904,7 +941,7 @@ console.log(arr.slice(0));
 hideInToc: true
 ---
 
-```ts {monaco-run} {autorun: false}
+```ts {monaco-run} {autorun: true}
 function combine<Type>(arr1: Type[], arr2: Type[]): Type[] {
   return arr1.concat(arr2);
 }
@@ -919,7 +956,29 @@ console.log(arr)
 hideInToc: true
 ---
 
-```ts {monaco-run} {autorun: false}
+```ts {monaco-run} {autorun: true}
+function merge<T, U>(firstObject: T, secondObject: U): T & U {
+  return {
+    ...firstObject,
+    ...secondObject,
+  };
+}
+
+type Result<T extends Function> = T extends (...args: never[]) => infer R
+  ? R
+  : never;
+
+let res35 = merge({ name: "ade" }, { age: 99 });
+console.log(res35)
+let res37 = merge({ school: "AltSchool" }, { job: "cleaner" });
+console.log(res37)
+
+```
+---
+hideInToc: true
+---
+
+```ts {monaco-run} {autorun: true}
 type FuncWithOneObjectArgument<P extends { [x: string]: any }, R> = (
   props: P
 ) => R;
@@ -997,7 +1056,73 @@ let name2: any = "wale";
 let age2: any = 99;
 add3(name2, age2);
 ```
+---
+
+# Enums
+
+```ts {monaco}
+enum Role {
+  ADMIN,
+  CLIENT,
+  SUPERADMIN,
+}
+
+type User = {
+  id: string;
+  // enum
+  role: Role;
+  // union types
+  // role: "CLIENT" | "ADMIN" | "SUPERADMIN";
+  name: string;
+  address: string;
+};
+```
+
+---
+hideInToc: true
+---
+
+
+```ts {monaco-run}
+enum Role { ADMIN, CLIENT, SUPERADMIN, };
+type User = { id: string; role: Role; name: string; address: string; };
+// union types // role: "CLIENT" | "ADMIN" | "SUPERADMIN";
+
+function checkUserRole(user: User): string {
+  const { role } = user;
+  if (role === Role.ADMIN) {
+    return "admin";
+  } else if (role === Role.CLIENT) {
+    return "client";
+  }
+  // Role.SUPERADMIN;
+  return "superadmin";
+}
+
+let userAltSchool: User = {
+  id: "001",
+  role: Role.ADMIN,
+  name: "ade ojo",
+  address: "lagos",
+};
+
+let resultAltSchool = checkUserRole(userAltSchool);
+console.log(resultAltSchool);
+```
 
 
 
 ---
+
+# Type Manipulation
+
+<v-clicks>
+
+<li onclick="$nav.go()"><span>keyof</span></li>
+<li onclick="$nav.go()"><span>typeof</span></li>
+<li onclick="$nav.go()"><span>indexed access types</span></li>
+<li onclick="$nav.go()"><span>conditional types</span></li>
+<li onclick="$nav.go()"><span>mapped types</span></li>
+<li onclick="$nav.go()"><span>template-literal-types</span></li>
+
+</v-clicks>

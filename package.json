@@ -5,8 +5,8 @@
   "scripts": {
     "build": "slidev build",
     "dev": "nodemon -w '../../packages/slidev/dist/*.mjs' --exec \"slidev ./slides.md --open=false --log=info\"",
-    "export": "slidev export --per-slide",
-    "export:pdf": "npm run export -- --format pdf --output typescript-note.pdf",
+    "export": "slidev export --with-clicks",
+    "export:pdf": "npm run export -- --with-toc --format pdf --output typescript-note",
     "export:pptx": "npm run export -- --format pptx --output typescript-note.pptx"
   },
   "dependencies": {

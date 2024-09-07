@@ -51,5 +51,5 @@ jobs:
           tag_name: export-${{ github.sha }}
           make_latest: true
           files: |
-            ./_export/slides.pdf
-            ./_export/slides.pptx
+            ./_export/typescript_classnotes.pdf
+            ./_export/typescript_classnotes.pptx
