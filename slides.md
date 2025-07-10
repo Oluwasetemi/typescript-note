@@ -165,7 +165,7 @@ hideInToc: true
 
 - Strictness: You can use the strict flag to enable all strict type-checking options or in the config file. You can opt out of strictness by setting strict to false or `noImplicitAny` to false and `strictNullChecks` to false.
 
-- Downleveling: You can use the target flag to specify the version of JavaScript that the TypeScript compiler should output. The default is ES3.
+- Downleveling: You can use the target flag to specify the version of JavaScript that the TypeScript compiler should output. The default is ES5.
 
 - Emitting with Errors: You can use the noEmitOnError flag to prevent the TypeScript compiler from emitting JavaScript code if there are any errors.
 
