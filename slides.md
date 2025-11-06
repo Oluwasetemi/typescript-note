@@ -3,8 +3,7 @@ theme: seriph
 background: https://res.cloudinary.com/drnqdd87d/image/upload/f_auto/nmgakkzd3lmlibnfosps
 title: TypeScript Class Notes by @Oluwasetemi
 info: |
-  ## TypeScript Class Notes
-
+  TypeScript Class Notes
   making of world class developers with AltSchool Africa.
 
   Join at [AltSchool Africa](https://altschoolafrica.com)
@@ -15,6 +14,20 @@ drawings:
 transition: slide-left
 mdc: true
 hideInToc: true
+titleTemplate: '%s - AltSchool Africa'
+author: Oluwasetemi
+download: true
+exportFilename: ts-note
+export:
+  format: pdf
+  timeout: 1600000
+  dark: false
+  withClicks: false
+  withToc: false
+# TODO: add a svg favicon
+# favicon: https://oluwasetemi.dev/favicon-32x32.png
+overviewSnapshots: true
+selectable: true
 ---
 
 # TypeScript Class Notes
@@ -196,264 +209,278 @@ hideInToc: true
 ---
 
 # Everyday Types
-The primitives, any, Type annotations on variables, Functions, Object types, Union Types, Type Aliases, Interfaces, Type Assertions, Literal Types, null and undefined, Enums
+The primitives, arrays, objects, functions, type aliases, interfaces, unions, intersections, type assertions, and more
 
 ````md magic-move
 ```ts
+// The Primitives - Basic building blocks
+let name: string = "OjoT99";
+let age: number = 99;
+let isAltSchoolStudent: boolean = false;
+let nothing: null = null;
+let something: undefined = undefined;
+
+// BigInt for large integers
+let bigNumber: bigint = 9007199254740991n;
+
+// Symbol for unique identifiers
+let uniqueId: symbol = Symbol("id");
+```
+
+```ts
+// any and unknown - When you don't know the type
+let anyValue: any = "hello";
+anyValue = 99; // no error
+anyValue.toUpperCase(); // no type checking - dangerous!
+
+let unknownValue: unknown = "hello";
+// unknownValue.toUpperCase(); // Error! Must check type first
+if (typeof unknownValue === "string") {
+  unknownValue.toUpperCase(); // OK - type narrowed
+}
+```
+
+```ts
+// Union Types - A value can be one of several types
 let person: string | number = "OjoT99";
 
 if (typeof person === "string") {
   person.split("T");
 } else {
   // only number
-  // person.toFixed(2);
+  person.toFixed(2);
 }
-
-let age: number = 99;
-
-let isAltSchoolStudent = false;
-let nothing = null;
-let something = undefined;
 ```
 
 ```ts
-let arrayOfScores = [99, 45, 56, 67, 99];
-let arrayOfScores2: number[] = [99, 45, 56, 67, 99];
+// Arrays - Collections of values
+let arrayOfScores: number[] = [99, 45, 56, 67, 99];
+let arrayOfNames: string[] = ["bisi", "sola", "augustina"];
 
-let arrayOfNames: string[] = ["bisi", "sola", "augustina", "typescritina"];
-
-let arrayOfTruths = [true, false];
-
+// Alternative generic syntax
 let names: Array<string> = ["dancing", "eating", "sleeping"];
-// <> -> generics  Array<number> Array<boolean> Array<null>
 
-let arrayInsideArrays = [["a"], ["b"]];
+// Arrays can hold different types with union
+let mixed: (string | number)[] = ["hello", 99, "world", 45];
 
-let newArr = [undefined];
+// Nested arrays
+let arrayInsideArrays: string[][] = [["a"], ["b"]];
 ```
 
 ```ts
+// Objects - Inline object types
 let obj: { name: string; age: number; job?: string } = {
   name: "ade",
   age: 99,
 };
 
-function greet(msg: string): string {
-  return msg + "Hi :dance:";
-}
-
+// Optional properties with type guards
 if (typeof obj.job === "string") {
-  // typeguard
-  greet(obj.job);
+  console.log(obj.job.toUpperCase());
 } else {
-  // strictly undefined
-  obj.job;
+  console.log("No job specified");
 }
 ```
 
 ```ts
+// Record utility type - for flexible object shapes
 let profile: Record<string, number> = {
   age: 99,
   height: 6,
   weight: 100,
 };
 
-let objFlex: Record<string | symbol, string | boolean | number> = {};
-
-objFlex.name = "lagbaja";
-objFlex.animal = "cat";
-objFlex[Symbol("id")] = true;
-// any or never
-//
-let objFlexNumber: Record<string, number> = {
+// Record with multiple value types
+let objFlex: Record<string, string | number> = {
+  name: "lagbaja",
   age: 99,
 };
 ```
 
 ```ts
-// mixing types
-const specialArr: Array<number | string | [] | {}> = [
-  "name",
-  99,
-  {},
-  [],
-  "ginia",
-  100,
-];
-
-let result: number[] = person.split("T");
-
-result;
-
-console.log(result);
-console.log("Hello", "AltSchool");
-```
-```ts
+// Literal Types - Specific values as types
 let user: "student" | "admin";
 
-user = "temi";
-
-user = "admin";
+user = "student"; // valid
+user = "admin"; // valid
+// user = "teacher"; // Error: not in the union
 ```
 
 ```ts
-function add(): number {
-  console.log("hello");
-  return 99;
-}
-
-// typing arguments
-function add2(a: number, b: number): number {
+// Functions - Basic function typing
+function add(a: number, b: number): number {
   return a + b;
 }
 
-add2(99, 78);
+// Arrow functions
+const multiply = (a: number, b: number): number => a * b;
+
+// Optional and default parameters
+function greet(name: string, greeting: string = "Hello"): string {
+  return `${greeting}, ${name}!`;
+}
+
+// Rest parameters
+function sum(...numbers: number[]): number {
+  return numbers.reduce((total, n) => total + n, 0);
+}
 ```
 
 ```ts
-// function overloading
+// void and never return types
+function logMessage(message: string): void {
+  console.log(message);
+  // no return value
+}
 
+function throwError(message: string): never {
+  throw new Error(message);
+  // never returns (throws or infinite loop)
+}
+
+function infiniteLoop(): never {
+  while (true) {}
+}
+```
+
+```ts
+// Function overloading - multiple function signatures
 function add3(a: number, b: number): number;
 function add3(a: string, b: string): string;
 function add3(a: any, b: any): any {
   return a + b;
 }
 
-add3("na", "me");
-add3(99, 78);
-let name2: any = "wale";
-let age2: any = 99;
-add3(name2, age2);
+add3("Hello", " World"); // string
+add3(99, 78); // number
 ```
 
-// type assertion as
-//
-
 ```ts
-// type alias
+// Type Aliases - Reusable type definitions
 type Person = {
   name: string;
   age: number;
+  email?: string;
 };
 
-let person2: Person = {
+let student: Person = {
   name: "ade",
   age: 99,
 };
 ```
-//
-//
 
 ```ts
-// interface
-interface Person2 {
+// Interfaces - Another way to define object shapes
+interface User {
   name: string;
   age: number;
+  email?: string;
 }
 
-function greet2(person: Person2): string {
-  return `Hello ${person.name}`;
+function greetUser(user: User): string {
+  return `Hello ${user.name}`;
 }
 
-greet2({ name: "ade", age: 99 });
+greetUser({ name: "ade", age: 99 });
 ```
 
 ```ts
-// type assertion
-let res = JSON.parse('{"name": "ade"}') as { name: string };
-```
-```ts
-// 'satifies', 'as const', '!'
+// Type vs Interface - When to use which?
+// Type: Can represent primitives, unions, tuples
+type ID = string | number;
+type Point = [number, number];
+
+// Interface: Better for objects, can be extended/merged
+interface Animal {
+  name: string;
+}
+
+interface Dog extends Animal {
+  breed: string;
+}
+
+// Both work for objects, choose based on your needs!
 ```
 
 ```ts
-const addTwoNumbers = (a: number, b: number): number => {
-  return a + b;
-};
+// Type Assertions - Telling TypeScript the specific type
+let parsed = JSON.parse('{"name": "ade"}') as { name: string };
+console.log(parsed.name);
 
+// Alternative syntax (not common in JSX/TSX)
+let parsed2 = <{ name: string }>JSON.parse('{"name": "ade"}');
+```
+
+```ts
+// Function parameters as objects
 interface Params {
   a: number;
   b: number;
 }
 
-const addTwoNumberObject = (params: { a: number; b: number }): number => {
+const addTwoNumbers = (params: Params): number => {
   return params.a + params.b;
 };
 
+addTwoNumbers({ a: 99, b: 78 });
 ```
 ```ts
-// extending the inteface(obj only!)
+// Extending interfaces - Building on existing types
 interface ThreeParams extends Params {
   c: number;
 }
-// conditional type
-type NewParams = ThreeParams extends Params ? string : number;
 
-const addThreeNumberObject = (params: ThreeParams): number => {
+const addThreeNumbers = (params: ThreeParams): number => {
   return params.a + params.b + params.c;
 };
 
-addThreeNumberObject({ a: 99, b: 78, c: 100 });
+addThreeNumbers({ a: 99, b: 78, c: 100 });
 ```
 
 ```ts
-// make b optional
-const addTwoNumberObject2 = (params: { a: number; b?: number }): number => {
+// Optional parameters in objects
+const addNumbers = (params: { a: number; b?: number }): number => {
   if (params.b) {
     return params.a + params.b;
   }
   return params.a;
 };
 
-console.log(addTwoNumberObject2({ a: 99 }));
-```
-```ts
-const addTwoNumberObject3 = (params: { a?: number; b?: number }): number => {
-  if (params.a) {
-    return params.a;
-  }
-
-  if (params.b) {
-    return params.b;
-  }
-
-  return 5;
-};
-
-addTwoNumberObject3({});
+console.log(addNumbers({ a: 99 })); // 99
+console.log(addNumbers({ a: 99, b: 1 })); // 100
 ```
 
 ```ts
-const addTwoNumber3 = (a: number = 2, b: number = 5) => {
-  return a + b;
-};
+// Type narrowing with 'in' operator
+type Cat = { name: string; meow: () => void };
+type Dog = { name: string; bark: () => void };
 
-addTwoNumber3();
+function makeSound(animal: Cat | Dog) {
+  if ("meow" in animal) {
+    animal.meow(); // TypeScript knows it's a Cat
+  } else {
+    animal.bark(); // TypeScript knows it's a Dog
+  }
+}
 
-type Admin = {
-  name: boolean;
-};
+// Note: See dedicated Enums section below for detailed coverage
 ```
 ````
 ---
 hideInToc: true
 ---
 
-# Everyday Types
+# Everyday Types - Advanced Patterns
 
 ````md magic-move
-```ts {*|1-3|*|6-9|10-13|15|*}
-function getPersonName(admin: Admin) {
-  return admin.name;
-}
-getPersonName({ name: false });
-
-type AdminModified = {
+```ts
+// Complex types with literal unions
+type Admin = {
   name: string;
   role: "client" | "admin" | "superadmin";
 };
 
-function getPersonString(admin: AdminModified) {
+function getPersonString(admin: Admin): string {
   return `${admin.name} is a ${admin.role}`;
 }
 
@@ -461,6 +488,7 @@ getPersonString({ name: "ken", role: "superadmin" });
 ```
 
 ```ts
+// Composing complex types
 type Post = {
   title: string;
   author: string;
@@ -469,160 +497,129 @@ type Post = {
 };
 
 type AdminWithPosts = {
-  posts: Array<Post>;
+  posts: Post[];
   name: string;
   role: "client" | "admin" | "superadmin";
 };
 
-function getPersonPost(person: AdminWithPosts): Array<Post> {
-  return person.posts;
-}
-```
-```ts
-let res = getPersonPost({
+const admin: AdminWithPosts = {
   posts: [
-    {
-      title: "hello",
-      author: "ken",
-      id: 99,
-      body: "hello blogpost content ",
-    },
+    { title: "TypeScript Tips", author: "ken", id: 1, body: "Content..." }
   ],
   name: "ken",
   role: "admin",
-});
-console.log(res);
+};
 ```
 
 ```ts
-type NewPost = keyof (typeof res)[0]; // "title" | "author" | "id" | "body"
-let newPostKey: NewPost = "author";
-console.log(newPostKey);
-```
-
-```ts
+// Utility Types - Pick and Omit
 type GitHubUser = {
   login: string;
   id: number;
   node_id: string;
   avatar_url: string;
-  gravatar_id: string;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
   name: string;
+  email: string;
+  bio: string;
 };
+
+// Pick - Select specific properties
+type UserBasic = Pick<GitHubUser, "login" | "id" | "name">;
+
+// Omit - Exclude specific properties
+type UserPublic = Omit<GitHubUser, "email">;
 ```
 
 ```ts
-type NewGitHub = Pick<GitHubUser, "login" | "id" | "node_id">;
-
-let newGitHub: NewGitHub = {
-  login: "ade",
-  id: 99,
-  node_id: "node_id",
-};
-
-type newGitHubModified = Omit<NewGitHub, "node_id">;
-
-let newGitHubModified: newGitHubModified = {
-  login: "ade",
-  id: 99,
-};
-```
-```ts
-async function fetchGitHubUser(username: string) {
-  return fetch(`https://api.github.com/users/${username}`).then((res) =>
-    res.json(),
-  );
+// Async Functions and Promises
+async function fetchGitHubUser(username: string): Promise<GitHubUser> {
+  const response = await fetch(`https://api.github.com/users/${username}`);
+  return response.json();
 }
+
+// ReturnType - Extract the return type of a function
+type FetchResult = ReturnType<typeof fetchGitHubUser>;
+// FetchResult is Promise<GitHubUser>
+
+// Awaited - Unwrap a Promise type
+type UnwrappedResult = Awaited<ReturnType<typeof fetchGitHubUser>>;
+// UnwrappedResult is GitHubUser
 ```
 
 ```ts
-const listOfStudent = new Set<string>();
-listOfStudent.add("ade");
-listOfStudent.add("ade");
+// Built-in Collections - Set and Map
+const students = new Set<string>();
+students.add("ade");
+students.add("ade"); // Duplicates ignored
+students.has("ade"); // true
 
-listOfStudent.has("ade");
-
-console.log(listOfStudent);
-
-let mapOfStudentToScores = new Map<string, number>();
-mapOfStudentToScores.set("ade", 99);
-console.log(mapOfStudentToScores);
-mapOfStudentToScores;
+const scores = new Map<string, number>();
+scores.set("ade", 99);
+scores.set("bisi", 87);
+scores.get("ade"); // 99
 ```
-```ts
-// tuples
-let tuple: [string, number] = ["ade", 99];
 
+```ts
+// Tuples - Fixed length arrays with specific types
+let person: [string, number] = ["ade", 99];
+
+// Optional tuple elements
 let color: [number, number, number, number?];
+color = [255, 0, 0, 0.5]; // RGBA
 
-color = [255, 0, 0, 0.1];
-// rgba
-
-let colorString = `rgb(${color.join(", ")})`;
+// Tuple with labels (TypeScript 4.0+)
+let point: [x: number, y: number] = [10, 20];
 ```
 ```ts
-// unions |
-let str: number | string;
+// Union Types - OR relationship (can be one type or another)
+let id: number | string;
+id = 99; // valid
+id = "user-123"; // also valid
 
-// at the level of types and interface
-let advancePostU: Post | { tags: string[] } = {
-  title: "hello",
-  id: 1,
-  author: "Authur Ts",
-  body: "hello body",
-  tags: ['hello', 'world']
-};
+type PostWithTags = Post | { tags: string[] };
 
-// intersection &
+// Intersection Types - AND relationship (must have all properties)
 type Tags = { tags: string[] };
-let advancePost: Post & Tags = {
-  title: "hello",
+type PostWithTagsRequired = Post & Tags;
+
+const blogPost: PostWithTagsRequired = {
+  title: "TypeScript Guide",
   id: 1,
-  author: "Authur Ts",
-  body: "hello body",
-  tags: ["hello", "world"],
+  author: "Ade",
+  body: "Content here...",
+  tags: ["typescript", "tutorial"],
 };
 ```
 
 ```ts
-let NewStringIndex: { [index: number]: string };
+// Index Signatures - Dynamic property names
+type StringArray = { [index: number]: string };
+const names: StringArray = ["ade", "bisi", "sola"];
 
-NewStringIndex = ["1", "2", "3", "4", "5"];
-
-// NewStringIndex = {
-//   name: "ade",
-//   age: "99",
-// };
-
-NewStringIndex[0] = "hello";
-
-NewStringIndex["job"] = "developer";
+type StringMap = { [key: string]: string };
+const config: StringMap = {
+  host: "localhost",
+  port: "8080",
+  protocol: "http"
+};
 ```
 
 ```ts
-// readonly
-let arrOfCommenter: readonly string[] = ["ade", "bisi", "sola"];
+// Readonly - Immutable types
+let commenters: readonly string[] = ["ade", "bisi", "sola"];
+// commenters.push("aderemi"); // Error: Property 'push' does not exist
 
-arrOfCommenter.push("aderemi");
+let readonlyArray: ReadonlyArray<string> = ["ade", "bisi", "sola"];
+// readonlyArray[0] = "changed"; // Error: Index signature is readonly
 
-let arrOfCommenter2: ReadonlyArray<string> = ["ade", "bisi", "sola"];
-arrOfCommenter2.push("aderemi");
+type ReadonlyPerson = {
+  readonly name: string;
+  readonly age: number;
+};
 ```
 
 ```ts
+// Generics - Write reusable, type-safe code
 function longest<Type extends { length: number }>(a: Type, b: Type) {
   if (a.length >= b.length) {
     return a;
@@ -631,113 +628,168 @@ function longest<Type extends { length: number }>(a: Type, b: Type) {
   }
 }
 
-let res34 = longest({ length: 4 }, { length: 6 });
-
-function merge<T, U>(firstObject: T, secondObject: U): T & U {
-  return {
-    ...firstObject,
-    ...secondObject,
-  };
-}
-
-let res35 = merge({ name: "ade" }, { age: 99 });
-let res37 = merge({ school: "AltSchool" }, { job: "cleaner" });
+longest([1, 2], [1, 2, 3]); // works with arrays
+longest("hi", "hello"); // works with strings
 ```
-```ts
-// enums - user (ADMIN, CLIENT, SUPERADMIN)
-enum Role {
-  ADMIN,
-  CLIENT,
-  SUPERADMIN,
-}
 
+```ts
+// Type Manipulation - keyof operator
 type User = {
   id: string;
-  // enum
-  role: Role;
-  // union types
-  // role: "CLIENT" | "ADMIN" | "SUPERADMIN";
   name: string;
-  address: string;
-};
-```
-
-```ts
-function checkUserRole(user: User): string {
-  const { role } = user;
-  if (role === Role.ADMIN) {
-    return "admin";
-  } else if (role === Role.CLIENT) {
-    return "client";
-  }
-  return "superadmin";
-}
-
-let userAltSchool: User = {
-  id: "001",
-  role: Role.ADMIN,
-  name: "ade ojo",
-  address: "lagos",
+  email: string;
+  age: number;
 };
 
-let resultAltSchool = checkUserRole(userAltSchool);
-console.log(resultAltSchool);
+type UserKeys = keyof User; // "id" | "name" | "email" | "age"
+let key: UserKeys = "name"; // valid
+// let invalid: UserKeys = "address"; // Error!
 ```
-```ts
-// Type manipulation - keyof, typeof, in, infer, extends, in, as, is, &
 
-type U = keyof {x: string, y: number} // 'x' | 'y'
-type KeyOfUserType = keyof User;
-type Arrayish = { [n: number]: string }; // string[]
-type keyOfArray = keyof Arrayish;
-let sampleArray: { [n: number]: string } = ["ade", "bisi", "sola"];
-
-let keyOfUser: KeyOfUserType = "name";
-```
 ```ts
-// typeof
+// typeof operator (type level)
 let myName = "ade";
-type Name = typeof myName;
+type NameType = typeof myName; // string
 
-type Predicate = (x: unknown) => boolean;
-type K = ReturnType<Predicate>;
+const person = { name: "ade", age: 99 };
+type PersonType = typeof person; // { name: string; age: number }
 
-type CheckUserRole = ReturnType<typeof checkUserRole>;
-
-function f() {
-  return { x: 10, y: 3 };
+function greet(name: string): string {
+  return `Hello ${name}`;
 }
-// infer
-type P = ReturnType<typeof f>;
+type GreetType = typeof greet; // (name: string) => string
 ```
-```ts
-// indexed access types
-type Person3 = { name: string; age: number; address: string };
-type Age = Person3["address" | "age"];
 
-// Conditional Types
-// SomeType extends OtherType ? TrueType : FalseType
-type Exclude<T, U> = T extends U ? never : T;
-// type T = Exclude<"a" | "b" | "c", "a" | "c">; // "b"
-```
 ```ts
-// mapped types
-type Person4 = {
-  [key: string]: string;
+// Indexed Access Types
+type Person = { name: string; age: number; address: string; isActive: boolean };
+
+type PersonName = Person["name"]; // string
+type PersonAge = Person["age"]; // number
+
+// Access multiple properties
+type PersonInfo = Person["name" | "age"]; // string | number
+
+// Access array element type
+type StringArray = string[];
+type ArrayElement = StringArray[number]; // string
+```
+
+```ts
+// Conditional Types - SomeType extends OtherType ? TrueType : FalseType
+type IsString<T> = T extends string ? true : false;
+
+type Test1 = IsString<string>; // true
+type Test2 = IsString<number>; // false
+
+// Practical example: Exclude utility type
+type MyExclude<T, U> = T extends U ? never : T;
+type Result = MyExclude<"a" | "b" | "c", "a" | "c">; // "b"
+```
+
+```ts
+// Conditional Types with infer
+type ReturnTypeCustom<T> = T extends (...args: any[]) => infer R ? R : never;
+
+function getUser() {
+  return { name: "ade", age: 99 };
+}
+
+type UserReturn = ReturnTypeCustom<typeof getUser>;
+// { name: string; age: number }
+
+// Extract array element type
+type Flatten<T> = T extends Array<infer Item> ? Item : T;
+type Num = Flatten<number[]>; // number
+type Str = Flatten<string>; // string
+```
+
+```ts
+// Mapped Types - Transform properties
+type Person = {
+  name: string;
+  age: number;
+  email: string;
 };
 
+// Make all properties optional
+type PartialPerson = {
+  [K in keyof Person]?: Person[K];
+};
+
+// Make all properties readonly
+type ReadonlyPerson = {
+  readonly [K in keyof Person]: Person[K];
+};
+```
+
+```ts
+// Built-in Mapped Types
+type Person = {
+  name: string;
+  age: number;
+  email: string;
+};
+
+// Partial - makes all properties optional
+type PartialPerson = Partial<Person>;
+
+// Required - makes all properties required
+type RequiredPerson = Required<PartialPerson>;
+
+// Readonly - makes all properties readonly
+type ReadonlyPerson = Readonly<Person>;
+
+// Record - construct object type
+type Roles = Record<"admin" | "user" | "guest", { permissions: string[] }>;
+```
+
+```ts
 // Template Literal Types
 type World = "world";
-type Greeting = `hello ${World}`;
+type Greeting = `hello ${World}`; // "hello world"
+
+type EmailDomain = "gmail" | "yahoo" | "outlook";
+type Email = `user@${EmailDomain}.com`;
+// "user@gmail.com" | "user@yahoo.com" | "user@outlook.com"
+
+// Practical example: Event names
+type Events = "click" | "focus" | "blur";
+type EventHandlers = `on${Capitalize<Events>}`;
+// "onClick" | "onFocus" | "onBlur"
+```
+
+```ts
+// Advanced Operators - satisfies, as const, and !
+type Color = { r: number; g: number; b: number } | string;
+
+// satisfies - Type check without widening
+const validColor = { r: 255, g: 0, b: 0 } satisfies Color;
+
+// as const - Create readonly literal types
+const config = {
+  host: "localhost",
+  port: 8080
+} as const;
+
+// ! - Non-null assertion (use with caution!)
+const element = document.getElementById("app")!;
 ```
 ````
 
 
 ---
+hideInToc: true
+---
+
+## Type Error Example
+
+This example shows a common type error - assigning the wrong type:
 
 ```ts twoslash
 let person: string | number = "helloTtypescript";
 
+// Error: Type 'string[]' is not assignable to type 'number[]'
 let result: number[] = person.split("T");
 //  //^?
 
@@ -745,10 +797,9 @@ console.log(result);
 console.log("Hello", "AltSchool");
 ```
 
-
 ---
 
-# functions
+# Function Signatures and Callbacks
 ````md magic-move
 ```ts
 function greeter(fn: (a: string) => void) {
@@ -801,9 +852,15 @@ type DescribableFunction = {
   (someArg: number): boolean;
 };
 
+// Define the object type that will be constructed
+type SomeObject = {
+  message: string;
+};
+
 type SomeConstructor = {
   new (s: string): SomeObject;
 };
+
 function fn(ctor: SomeConstructor) {
   return new ctor("hello");
 }
@@ -868,14 +925,134 @@ let s2 = firstElement(['hello', 'dance'])
 ---
 hideInToc: true
 ---
-## Solve this using TS Generics
+
+# Creating Generic Functions
+
+````md magic-move
+```ts
+// Problem: We need a function that works with numbers
+function getFirstNumber(arr: number[]): number {
+  return arr[0];
+}
+
+let num = getFirstNumber([1, 2, 3]); // Works!
+// But what if we need strings?
+```
+
+```ts
+// Problem: Now we need a separate function for strings
+function getFirstNumber(arr: number[]): number {
+  return arr[0];
+}
+
+function getFirstString(arr: string[]): string {
+  return arr[0];
+}
+
+let num = getFirstNumber([1, 2, 3]);
+let str = getFirstString(['a', 'b', 'c']);
+// This is repetitive and not scalable!
+```
+
+```ts
+// Bad Solution: Using 'any' loses type safety
+function getFirst(arr: any[]): any {
+  return arr[0];
+}
+
+let num = getFirst([1, 2, 3]); // Type is 'any' - not safe!
+let str = getFirst(['a', 'b', 'c']); // Type is 'any' - not safe!
+
+// We lost all type information
+num.toUpperCase(); // No error but will crash at runtime!
+```
+
+```ts
+// Solution: Generic Function - Use a Type Parameter
+function getFirst<Type>(arr: Type[]): Type {
+  return arr[0];
+}
+
+let num = getFirst([1, 2, 3]); // Type is 'number'
+let str = getFirst(['a', 'b', 'c']); // Type is 'string'
+
+// TypeScript inferred the types automatically!
+// num.toUpperCase(); // Error: Property doesn't exist on number ✓
+```
+
+```ts
+// Generic Function - Explicit Type Arguments
+function getFirst<Type>(arr: Type[]): Type {
+  return arr[0];
+}
+
+// TypeScript can infer the type
+let num = getFirst([1, 2, 3]);
+
+// Or you can be explicit
+let str = getFirst<string>(['a', 'b', 'c']);
+let bool = getFirst<boolean>([true, false]);
+
+// Works with any type!
+```
+
+```ts
+// Generic Function - Multiple Type Parameters
+function pair<T, U>(first: T, second: U): [T, U] {
+  return [first, second];
+}
+
+let p1 = pair("hello", 42); // [string, number]
+let p2 = pair(true, "world"); // [boolean, string]
+let p3 = pair(100, 200); // [number, number]
+
+// Each parameter can be a different type!
+```
+
+```ts
+// Generic Constraints - Limiting what types can be used
+function getLength<Type extends { length: number }>(value: Type): number {
+  return value.length;
+}
+
+getLength("hello"); // Works - strings have length
+getLength([1, 2, 3]); // Works - arrays have length
+getLength({ length: 10 }); // Works - object has length
+
+// getLength(42); // Error: number doesn't have length property ✓
+```
+
+```ts
+// Real-world Example: Generic Array Filter
+function filterArray<T>(arr: T[], predicate: (item: T) => boolean): T[] {
+  return arr.filter(predicate);
+}
+
+let numbers = filterArray([1, 2, 3, 4], n => n > 2);
+// numbers is number[]
+
+let names = filterArray(['ade', 'bisi', 'ojo'], name => name.length > 3);
+// names is string[]
+
+// One function, works with any type, keeps type safety!
+```
+````
+
+---
+hideInToc: true
+---
+## Exercise: Solve this using TS Generics
+
+**Challenge**: The code below has a type error. Fix it by converting the function to use generics so it can work with any array type.
 
 ```ts {monaco-run} {autorun: true}
+// TODO: Convert this to a generic function
 function getRandomNumberElement(items: number[]): number {
   let randomIndex = Math.floor(Math.random() * items.length);
   return items[randomIndex];
 }
 
+// This will cause a type error - string[] is not assignable to number[]
 let randyValue = getRandomNumberElement(['ayo', 'ade', 'ojo', 'jerry'])
 
 console.log(randyValue)
@@ -1040,24 +1217,6 @@ const val2 = filter2([1, 2, 3, 4], n => n % 2 === 0)
 
 ---
 
-# function overloading
-
-```ts twoslash
-
-function add3(a: number, b: number): number;
-function add3(a: string, b: string): string;
-function add3(a: any, b: any): any {
-  return a + b;
-}
-
-add3("na", "me");
-add3(99, 78);
-let name2: any = "wale";
-let age2: any = 99;
-add3(name2, age2);
-```
----
-
 # Enums
 
 ```ts {monaco}
@@ -1110,19 +1269,67 @@ let resultAltSchool = checkUserRole(userAltSchool);
 console.log(resultAltSchool);
 ```
 
-
-
+---
+layout: center
+class: text-center
+hideInToc: true
 ---
 
-# Type Manipulation
+# Thank You!
+
+You've learned TypeScript fundamentals
+
+<div class="pt-12">
+  <span class="text-6xl">🎉</span>
+</div>
+
+## What's Next?
 
 <v-clicks>
 
-<li onclick="$nav.go()"><span>keyof</span></li>
-<li onclick="$nav.go()"><span>typeof</span></li>
-<li onclick="$nav.go()"><span>indexed access types</span></li>
-<li onclick="$nav.go()"><span>conditional types</span></li>
-<li onclick="$nav.go()"><span>mapped types</span></li>
-<li onclick="$nav.go()"><span>template-literal-types</span></li>
+- Practice with real projects using vite
+- Explore advanced TypeScript patterns
+- Build type-safe applications
+- Over to the [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/basic_type_example)
 
 </v-clicks>
+
+<style scoped>
+ul {
+  list-style-type: none;
+}
+</style>
+
+<div class="pt-12 text-sm">
+  <p>Follow me: <a href="https://twitter.com/setemiojo" target="_blank">@iamsetemi</a></p>
+  <p>GitHub: <a href="https://github.com/Oluwasetemi" target="_blank">@Oluwasetemi</a></p>
+</div>
+
+<div class="abs-br m-6 flex gap-2">
+  <a href="https://altschoolafrica.com" target="_blank" alt="AltSchool Africa"
+    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+    AltSchool Africa
+  </a>
+</div>
+
+---
+layout: center
+class: text-center
+hideInToc: true
+---
+
+# Questions?
+
+<div class="pt-12">
+  <span class="text-8xl">🤔</span>
+</div>
+
+<div class="pt-12">
+  <p class="text-2xl">Feel free to ask anything about TypeScript</p>
+</div>
+
+<div class="pt-8 text-sm opacity-75">
+  <p>Resources:</p>
+  <p><a href="https://www.typescriptlang.org/" target="_blank">TypeScript Official Docs</a></p>
+  <p><a href="https://github.com/Oluwasetemi/typescript-class-note" target="_blank">Course Repository</a></p>
+</div>
