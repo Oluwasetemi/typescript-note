@@ -176,7 +176,7 @@ Found a typo or want to improve the content? Contributions are welcome!
 ## Author
 
 **Oluwasetemi Ojo**
-- Twitter: [@iamsetemi](https://twitter.com/iamsetemi)
+- Twitter: [@setemiojo](https://twitter.com/setemiojo)
 - GitHub: [@Oluwasetemi](https://github.com/Oluwasetemi)
 - Website: [oluwasetemi.dev](https://oluwasetemi.dev)
 
