@@ -188,6 +188,11 @@
    - C) Makes the compiler happy
    - D) Validates at runtime
 
+
+---
+
+Sample: https://gemini.google.com/share/0328b0d35126
+
 ---
 
 ## Part B: True or False (10 points)
